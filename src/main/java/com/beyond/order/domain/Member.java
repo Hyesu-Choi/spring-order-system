@@ -23,6 +23,7 @@ public class Member {
     private String password;
     private String name;
     @Enumerated(value = EnumType.STRING)
+    @Builder.Default
     private Role role = Role.USER;
     @Builder.Default
     private LocalDateTime createdTime =  LocalDateTime.now();
