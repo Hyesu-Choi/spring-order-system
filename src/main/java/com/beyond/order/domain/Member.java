@@ -1,9 +1,6 @@
 package com.beyond.order.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +15,16 @@ import java.time.LocalDateTime;
 @Builder
 public class Member {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String password;
     private String name;
     @Enumerated(value = EnumType.STRING)
-    private Role role;
-    private LocalDateTime createdTime;
+    private Role role = Role.USER;
+    @Builder.Default
+    private LocalDateTime createdTime =  LocalDateTime.now();
 
 }

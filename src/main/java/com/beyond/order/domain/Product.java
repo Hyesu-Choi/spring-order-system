@@ -1,7 +1,6 @@
 package com.beyond.order.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,14 +13,21 @@ import java.time.LocalDateTime;
 @Builder
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT), nullable = false)
     private Member member;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private int price;
     private String category;
+    @Column(nullable = false)
     private int stockQuantity;
     private String imagePath;
-    private LocalDateTime createdTime;
+    @Builder.Default
+    private LocalDateTime createdTime =  LocalDateTime.now();
 
 
 }
