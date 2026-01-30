@@ -29,5 +29,9 @@ public class Product {
     @Builder.Default
     private LocalDateTime createdTime =  LocalDateTime.now();
 
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.imagePath = profileImageUrl;
+    }
+
 
 }
