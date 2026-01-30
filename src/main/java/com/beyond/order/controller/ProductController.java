@@ -5,6 +5,7 @@ import com.beyond.order.dto.ordering.ProductSearchDto;
 import com.beyond.order.dto.product.ProductCreateReqDto;
 import com.beyond.order.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -26,8 +27,8 @@ public class ProductController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> productCreate(@ModelAttribute ProductCreateReqDto dto, @RequestPart("productImage") MultipartFile productImage, @AuthenticationPrincipal String principal) {
-        Long productId = productService.productCreate(dto, productImage, principal);
+    public ResponseEntity<?> productCreate(@ModelAttribute ProductCreateReqDto dto, @AuthenticationPrincipal String principal) {
+        Long productId = productService.productCreate(dto, principal);
         return ResponseEntity.status(HttpStatus.CREATED).body(productId);
     }
 
@@ -38,7 +39,9 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<?> productList(@PageableDefault(size = 10, page = 0) Pageable pageable, @ModelAttribute ProductSearchDto searchDto)  {
+    public ResponseEntity<?> productList(Pageable pageable, ProductSearchDto searchDto)  {
+//        Page객체로 받아서 body에 넣기
+
         return ResponseEntity.status(HttpStatus.OK).body(productService.productList(pageable, searchDto));
     }
 

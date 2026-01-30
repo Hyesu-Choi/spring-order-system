@@ -38,6 +38,7 @@ public class OrderingController {
     }
 
     @GetMapping("/myorders")
+//    여긴 인가 제거해야함
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> myOrderList(@AuthenticationPrincipal String principal) {
        List<OrderingMyListResDto> myOrderList = orderingService.myOrderList(principal);

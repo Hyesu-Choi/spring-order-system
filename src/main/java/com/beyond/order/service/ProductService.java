@@ -47,15 +47,17 @@ public class ProductService {
         this.s3Client = s3Client;
     }
 
-    public Long productCreate(ProductCreateReqDto dto, MultipartFile productImage, String principal) {
-        Member member = memberRepository.findByEmail(principal)
+    public Long productCreate(ProductCreateReqDto dto, String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다"));
 
         Product product = dto.toEntity(member);
         Product productDb = productRepository.save(product);
 
+        MultipartFile productImage = dto.getProductImage();
+
         if (productImage != null) {
-            String fileName = "user-" + product.getId() + "-productImage-" + productImage.getOriginalFilename();
+            String fileName = "product-" + product.getId() + "-productImage-" + productImage.getOriginalFilename();
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucket)
                     .key(fileName)
@@ -91,7 +93,6 @@ public class ProductService {
                         cb.like(root.get("name"), "%" + searchDto.getProductName() + "%")
                 );
             }
-
             if (searchDto.getCategory() != null) {
                 predicates.add(
                         cb.equal(root.get("category"), searchDto.getCategory())

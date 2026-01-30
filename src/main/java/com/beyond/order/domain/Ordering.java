@@ -28,7 +28,7 @@ public class Ordering {
 
     @OneToMany(mappedBy = "ordering", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<OrderingDetails> orderingDetails = new ArrayList<>();
+    private List<OrderingDetails> orderingDetails = new ArrayList<>();  // 캐스캐이딩할 때 초기화안하면 null exception 터짐.
 
 
     public void addOrderingDetails(OrderingDetails details) {

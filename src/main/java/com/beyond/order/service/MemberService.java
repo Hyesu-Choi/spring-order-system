@@ -29,15 +29,12 @@ public class MemberService {
     }
 
     public Long memberCreate(MemberCreateReqDto dto) {
-//        이메일 중복인지 확인
         if (memberRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("이미 존재하는 email입니다.");
         }
         Member member = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
-//        dto -> entity로 바꿔서 db에 저장
-        Member saveMember = memberRepository.save(member);
-//        생성된 id값 리턴
-        return saveMember.getId();
+        memberRepository.save(member);
+        return member.getId();
     }
 
     public MemberLoginRespDto memberLogin(MemberLoginReqDto dto) {
@@ -47,18 +44,19 @@ public class MemberService {
             throw new IllegalArgumentException("비밀번호 불일치");
         }
         String accessToken = jwtTokenProvider.createToken(member);
-        String refreshToken = jwtTokenProvider.createRefreshToken(member);
+        String refreshToken = null;
 
         return new MemberLoginRespDto(accessToken, refreshToken);
     }
 
+//    @Transactional(readOnly = true)
     public List<MemberListRespDto> memberList(){
         return memberRepository.findAll().stream().map(a -> MemberListRespDto.fromEntity(a))
                 .collect(Collectors.toList());
     }
 
-    public MemberMyinfoResqDto memberMyInfo(String principal) {
-        Optional<Member> opt = memberRepository.findByEmail(principal);
+    public MemberMyinfoResqDto memberMyInfo(String email) {
+        Optional<Member> opt = memberRepository.findByEmail(email);
         Member member = opt.orElseThrow(() -> new EntityNotFoundException("entity is not found"));
         MemberMyinfoResqDto dto = MemberMyinfoResqDto.fromEntity(member);
         return dto;

@@ -17,7 +17,7 @@ public class ProductCreateReqDto {
     private int price;
     private String category;
     private int stockQuantity;
-//    private MultipartFile productImage;
+    private MultipartFile productImage;
 
     public Product toEntity(Member member) {
         return Product.builder()
