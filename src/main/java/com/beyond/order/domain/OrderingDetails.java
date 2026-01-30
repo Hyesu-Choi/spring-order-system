@@ -26,4 +26,15 @@ public class OrderingDetails {
     @Builder.Default
     private LocalDateTime createdTime =  LocalDateTime.now();
 
+    public static OrderingDetails save(Product product, int quantity) {
+        return OrderingDetails.builder()
+                .product(product)
+                .quantity(quantity)
+                .build();
+    }
+
+    public void setOrder(Ordering ordering) {
+        this.ordering = ordering;
+    }
+
 }

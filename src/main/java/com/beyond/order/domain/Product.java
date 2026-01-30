@@ -33,5 +33,9 @@ public class Product {
         this.imagePath = profileImageUrl;
     }
 
+    public void decreaseStockQuantity(int quantity) {
+        this.stockQuantity -= quantity;
+    }
+
 
 }

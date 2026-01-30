@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +25,22 @@ public class Ordering {
     private OrderStatus orderStatus = OrderStatus.ORDERED;
     @Builder.Default
     private LocalDateTime createdTime =  LocalDateTime.now();
+
+    @OneToMany(mappedBy = "ordering", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<OrderingDetails> orderingDetails = new ArrayList<>();
+
+
+    public void addOrderingDetails(OrderingDetails details) {
+        orderingDetails.add(details);
+        details.setOrder(this);
+    }
+
+    public static Ordering toEntity(Member member) {
+        return Ordering.builder()
+                .member(member)
+                .build();
+    }
 
 
 }
